@@ -1,8 +1,7 @@
-
 // ===== src/components/Navbar.jsx =====
 import React, { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
-
+import logo from '../image/chat.png'; // Adjust the path as necessary
 import {
   AppBar,
   Toolbar,
@@ -46,32 +45,31 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar
-      position="sticky"
-      elevation={4}
-      sx={{
-        background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`
-      }}
-    >
-      <Container maxWidth="lg">
-        <Toolbar disableGutters>
-          {/* Logo */}
-          <Typography
-            variant="h6"
-            component={RouterLink}
-            to="/"
-            sx={{
-              textDecoration: 'none',
-              color: '#fff',
-              fontWeight: 'bold',
-              letterSpacing: 1,
-              mr: 2,
-              flexGrow: isMobile ? 1 : 0
-            }}
-          >
-            NodSync
-          </Typography>
-
+ <AppBar
+  position="sticky"
+  elevation={4}
+  sx={{
+    background: 'linear-gradient(90deg, #0F1C57, #00C9A7)',
+  }}
+>
+    <Container maxWidth="lg">
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        {/* Logo and title */}
+        <Box
+          component={RouterLink}
+          to="/"
+          sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: '#fff' }}
+        >
+  <Box
+    component="img"
+    src={logo}
+    alt="Tech Trove Logo"
+    sx={{ height: 50, width: 'auto', mr: 1}}
+  />
+  <Typography variant="h6" sx={{ fontWeight: 'bold', letterSpacing: 1 }}>
+    Tech Trove
+  </Typography>
+</Box>
           {/* Desktop menu */}
           {!isMobile && (
             <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>

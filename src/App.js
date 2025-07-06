@@ -1,13 +1,17 @@
 // src/App.js
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute   from './components/PrivateRoute';
 import Navbar       from './components/Navbar';
-import SignIn     from './Pages/SignIn';
-import SignUp     from './Pages/SignUp';
-import Profile    from './Pages/Profile';
-import Home       from './Pages/Home';
+import SignIn     from './pages/SignIn';
+import SignUp     from './pages/SignUp';
+import Profile    from './pages/Profile';
+import Home       from './pages/Home';
+import ProductForm from './pages/ProductForm';
+import AdminDashboard from './pages/AdminDashboard';
+import './App.css';
 
 function App() {
   return (
@@ -35,6 +39,16 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="/admin" element={
+            <PrivateRoute>
+           <AdminDashboard />
+          </PrivateRoute>
+         }/>
+           <Route path="/admin/product/:id" element={
+         <PrivateRoute>
+         <ProductForm />
+        </PrivateRoute>
+        }/>
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -32,16 +32,19 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PhoneIcon        from '@mui/icons-material/Phone';
 import HomeIcon         from '@mui/icons-material/Home';
 import ImageIcon        from '@mui/icons-material/Image';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
 
 export default function SignUp() {
   const theme   = useTheme();
   const navigate = useNavigate();
 
-  const [displayName, setDisplayName] = useState('');
+  const [FirstName, setFirstName] = useState('');
+  const [LastName,    setLastName]    = useState('');
   const [email,       setEmail]       = useState('');
   const [password,    setPassword]    = useState('');
   const [phone,       setPhone]       = useState('');
   const [address,     setAddress]     = useState('');
+  const [city,         setCity]       = useState('');
   const [photoURL,    setPhotoURL]    = useState('');
   const [preview,     setPreview]     = useState('');
   const [error,       setError]       = useState('');
@@ -54,17 +57,18 @@ export default function SignUp() {
   const handleSubmit = async e => {
     e.preventDefault();
     setError(''); setLoading(true);
-    if (!displayName.trim() || !phone.trim() || !address.trim()) {
+    if (!FirstName.trim() || !LastName.trim() || !phone.trim() || !address.trim()) {
       setError('Please fill in all required fields.');
       setLoading(false);
       return;
     }
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(user, { displayName, photoURL });
+      await updateProfile(user, { FirstName, photoURL });
       await setDoc(doc(db, 'users', user.uid), {
         uid:         user.uid,
-        displayName,
+        FirstName,
+        LastName,
         email:       user.email,
         phoneNumber: phone,
         address,
@@ -99,7 +103,7 @@ export default function SignUp() {
       >
         <CardContent>
           <Stack spacing={2} alignItems="center">
-            <Avatar sx={{ bgcolor: theme.palette.secondary.main, width: 64, height: 64 }}>
+            <Avatar sx={{ background: 'linear-gradient(90deg, #0F1C57, #00C9A7)', width: 56, height: 56 }}>
               <LockOutlinedIcon fontSize="large" />
             </Avatar>
             <Typography variant="h5">Sign Up</Typography>
@@ -114,8 +118,17 @@ export default function SignUp() {
               <Stack spacing={2}>
                 <TextField
                   required fullWidth
-                  label="Full Name"
-                  value={displayName} onChange={e => setDisplayName(e.target.value)}
+                  label="First Name"
+                  value={FirstName} onChange={e => setFirstName(e.target.value)}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment>
+                  }}
+                  sx={{ borderRadius: 2 }}
+                />
+                 <TextField
+                  required fullWidth
+                  label="Last Name"
+                  value={LastName} onChange={e => setLastName(e.target.value)}
                   InputProps={{
                     startAdornment: <InputAdornment position="start"><PersonIcon /></InputAdornment>
                   }}
@@ -164,11 +177,18 @@ export default function SignUp() {
                   }}
                   sx={{ borderRadius: 2 }}
                 />
-
-                <TextField
+                 <TextField
+                     required  fullWidth
+                    label="City"
+                    value={city} onChange={e => setCity(e.target.value)}
+                    InputProps={{
+                    startAdornment: <InputAdornment position="start"><LocationCityIcon /></InputAdornment>
+                    }}
+                     sx={{ borderRadius: 2 }}
+                    />
+                  <TextField
                   fullWidth
                   label="Profile Photo URL (optional)"
-                  placeholder="https://example.com/your-photo.jpg"
                   value={photoURL} onChange={e => setPhotoURL(e.target.value)}
                   InputProps={{
                     startAdornment: <InputAdornment position="start"><ImageIcon /></InputAdornment>,
@@ -190,7 +210,7 @@ export default function SignUp() {
                     py: 1.5,
                     borderRadius: 2,
                     fontWeight: 'bold',
-                    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                    background: 'linear-gradient(90deg, #0F1C57, #00C9A7)',
                     color: '#fff',
                     '&:hover': {
                       opacity: 0.9

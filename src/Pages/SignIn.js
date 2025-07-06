@@ -3,6 +3,7 @@ import React, { useState }                    from 'react';
 import { useNavigate, Link as RouterLink }    from 'react-router-dom';
 import { auth }                               from '../firebase/config';
 import { signInWithEmailAndPassword }         from 'firebase/auth';
+
 import {
   Avatar,
   Box,
@@ -40,30 +41,68 @@ export default function SignIn() {
   };
 
   return (
+    <Box sx={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
+    {/* Background Video */}
+    <video
+      autoPlay
+      loop
+      muted
+      style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        top: 0,
+        left: 0,
+        zIndex: -1,
+      }}
+    >
+      <source src="/headph.mp4" type="video/mp4" />
+    </video>
+    
     <Box
       sx={{
-        minHeight: '100vh',
-        background: `linear-gradient(135deg, ${theme.palette.primary[50]} 0%, ${theme.palette.secondary[100]} 100%)`,
+        minHeight: '40vh',
+        backgroundSize: 'auto',
+        backgroundPosition: 'right',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        p: 4,
+      }}
+     >
+       
+    <Box
+      sx={{
+        minHeight: '80vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        p: 2
+        p:4,
+
       }}
     >
+       
       <Card
-        elevation={8}
+        elevation={4}
         sx={{
           maxWidth: 400,
           width: '100%',
-          borderRadius: 3
+          borderRadius: 3,
+          backgroundColor: 'rgba(255, 255, 255, 0.40)',
+          backdropFilter: 'blur(25px)',
+          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)', 
         }}
       >
         <CardContent>
           <Stack spacing={2} alignItems="center">
-            <Avatar sx={{ bgcolor: theme.palette.secondary.main, width: 64, height: 64 }}>
+            <Avatar sx={{ background: 'linear-gradient(90deg, #0F1C57, #00C9A7)', width: 56, height: 56 }}>
               <LockOutlinedIcon fontSize="large" />
             </Avatar>
             <Typography variant="h5">Sign In</Typography>
+            <Typography variant="h6" color="       " textAlign="center">
+              "Unlock the future of gadgets — one click away."
+            </Typography>
 
             {error && (
               <Typography variant="body2" color="error" textAlign="center">
@@ -71,22 +110,36 @@ export default function SignIn() {
               </Typography>
             )}
 
-            <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+            <Box component="form" onSubmit={handleSubmit}
+             sx={{ 
+              width: '100%' }}>
+                
               <Stack spacing={2}>
                 <TextField
                   required fullWidth
                   label="Email Address"
                   type="email"
-                  value={email}
+                  value={email} 
                   onChange={e => setEmail(e.target.value)}
+                   InputLabelProps={{
+                   sx: {
+                    color: 'black',
+                     // or match it with card background
+                    }
+                  }}
+                  
+
                   InputProps={{
                     startAdornment: (
-                      <InputAdornment position="start">
-                        <EmailIcon />
+                      <InputAdornment position="start" backgroundColor="white">
+                         <EmailIcon /> 
                       </InputAdornment>
-                    )
+                    ),
+                    sx: {
+                       color: 'white', 
+                  }
                   }}
-                  sx={{ borderRadius: 2 }}
+                  
                 />
 
                 <TextField
@@ -111,13 +164,14 @@ export default function SignIn() {
                     py: 1.5,
                     borderRadius: 2,
                     fontWeight: 'bold',
-                    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                     background: 'linear-gradient(90deg, #0F1C57, #00C9A7)',
                     color: '#fff',
                     '&:hover': { opacity: 0.9 }
                   }}
                 >
                   Sign In
                 </Button>
+                
 
                 <Typography variant="body2" textAlign="center">
                   Don’t have an account?{' '}
@@ -131,5 +185,7 @@ export default function SignIn() {
         </CardContent>
       </Card>
     </Box>
-  );
+    </Box>
+    </Box>  
+    );
 }
