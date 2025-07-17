@@ -3,6 +3,8 @@ import { auth, db } from '../firebase/config';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import  background   from '../image/cart.png';
+import { useNavigate } from 'react-router-dom';
+
 import {
   Avatar,
   Box,
@@ -35,7 +37,7 @@ export default function Profile() {
   const [user, setUser] = useState(null);
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
@@ -138,11 +140,22 @@ export default function Profile() {
                   borderRadius: 4 
                   }}
                   >
-                  <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <center>
-                    <Typography variant="h5">Contact Information</Typography>
-                   </center>
+                  <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                    <Box display="flex" alignItems="center" gap={12}>
+                      <Typography variant="h5" sx={{ color: '#fff', fontWeight: 'bold' }}>
+                     Contact Information
+                    </Typography>
+                   <IconButton
+                    sx={{ color: '#2196f3' , p: 0.5 }} 
+                    aria-label="edit-contact" 
+                    size="small"
+                    onClick={() => navigate('/edit-profile')} >
+                     <EditIcon fontSize="small" />
+                    </IconButton>
+                    
+                   </Box>
                   </Box>
+
                   <List>
                     <ListItem>
                       <ListItemIcon><EmailIcon sx={{ color: '#fff' }} /></ListItemIcon>

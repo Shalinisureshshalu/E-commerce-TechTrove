@@ -1,6 +1,4 @@
-
 /////crtttt code profm
-
 // ===== src/pages/ProductForm.jsx =====
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams }     from 'react-router-dom';
@@ -47,9 +45,14 @@ export default function ProductForm() {
   const [form, setForm]     = useState({
     name: '',
     category: '',
+    Brand:'',
     price: '',
+    WarrantyPeriod:'',
     imageUrl: '',
-    description: ''
+    description: '',
+    DemoVideoUrl:'',
+  
+    
   });
   const [loading, setLoading] = useState(isEdit);
   const [error, setError]     = useState('');
@@ -64,9 +67,12 @@ export default function ProductForm() {
             setForm({
               name: data.name,
               category: data.category,
+              Brand: data.Brand,
               price: data.price.toString(),
+              WarrantyPeriod: data.WarrantyPeriod ||'',
               imageUrl: data.imageUrl || '',
-              description: data.description || ''
+              description: data.description || '',
+              DemoVideoUrl:data.DemoVideoUrl || '',
             });
           }
         } catch (err) {
@@ -94,12 +100,12 @@ export default function ProductForm() {
       const payload = {
         name:        form.name,
         category:    form.category,
-        Brand:       form.brand,
+        Brand:       form.Brand,
         price:       parseFloat(form.price),
         imageUrl:    form.imageUrl,
         description: form.description,
-        WarentyPeriod: form.warentyPeriod,
-        DemoVideoUrl: form.demoVideoUrl,
+        WarrantyPeriod: form.WarrantyPeriod,
+        DemoVideoUrl: form.DemoVideoUrl,
         updatedAt:   serverTimestamp()
       };
       if (isEdit) {
@@ -220,8 +226,8 @@ export default function ProductForm() {
         <Grid item xs={12} md={6}>
           <TextField
             label="Brand"
-            value={form.brand}
-            onChange={handleChange('brand')}
+            value={form.Brand}
+            onChange={handleChange('Brand')}
             fullWidth
             sx={{ maxWidth: 400 }}
             InputProps={{
@@ -255,9 +261,9 @@ export default function ProductForm() {
         <Grid item xs={12} md={6}>
           <TextField
             required
-            label="Warenty Period"
-            value={form.warentyPeriod}
-            onChange={handleChange('warentyPeriod')}
+            label="Warranty Period"
+            value={form.WarrantyPeriod}
+            onChange={handleChange('WarrantyPeriod')}
             fullWidth
             sx={{ maxWidth: 400 }}
             InputProps={{
@@ -309,8 +315,8 @@ export default function ProductForm() {
         <Grid item xs={12}>
           <TextField
             label="Demo Video URL"
-            value={form.demoVideoUrl}
-            onChange={handleChange('demoVideoUrl')}
+            value={form.DemoVideoUrl}
+            onChange={handleChange('DemoVideoUrl')}
             fullWidth
             sx={{ maxWidth: '100%' }}
             InputProps={{

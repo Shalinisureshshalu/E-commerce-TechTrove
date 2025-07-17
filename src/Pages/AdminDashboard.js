@@ -19,14 +19,15 @@ import {
   CircularProgress,
   Typography,
   Tooltip,
+  Link,
   useTheme
 }                                              from '@mui/material';
 import AddIcon          from '@mui/icons-material/Add';
 import EditIcon         from '@mui/icons-material/Edit';
 import DeleteIcon       from '@mui/icons-material/Delete';
-import { collection, onSnapshot, doc, deleteDoc }
-                                              from 'firebase/firestore';
+import { collection, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
 import { db }           from '../firebase/config';
+
 
 export default function AdminDashboard() {
   const theme     = useTheme();
@@ -77,7 +78,7 @@ export default function AdminDashboard() {
     <Box
       sx={{
         minHeight: '100vh',
-        background: `linear-gradient(135deg, ${theme.palette.primary[50]} 0%, ${theme.palette.secondary[100]} 100%)`,
+        
         py: 6
       }}
     >
@@ -89,14 +90,24 @@ export default function AdminDashboard() {
           alignItems="center"
           mb={3}
         >
-          <Typography variant="h4">Admin Dashboard</Typography>
+          <Typography variant="h4"  
+           sx={{
+           fontFamily: 'Poppins, sans-serif', // Change to any Google Font or system font
+           fontWeight: 500,
+           color:'#0F1C57',
+           letterSpacing: '1px',
+           textTransform: 'uppercase',
+           mb: 3, // margin-bottom
+            }}
+        
+          >Admin Dashboard</Typography>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             component={RouterLink}
             to="/admin/product/new"
             sx={{
-              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+              background: 'linear-gradient(90deg, #0F1C57, #00C9A7)',
               color: '#fff',
               '&:hover': { opacity: 0.9 }
             }}
@@ -108,7 +119,7 @@ export default function AdminDashboard() {
         {/* Products table */}
         <TableContainer
           component={Paper}
-          elevation={3}
+          elevation={2}
           sx={{
             borderRadius: 2,
             overflow: 'hidden',
@@ -120,15 +131,26 @@ export default function AdminDashboard() {
         >
           <Table stickyHeader>
             <TableHead>
-              <TableRow>
-                {['Name', 'Category', 'Price', 'Description', 'Actions'].map(h => (
+              <TableRow
+                sx={{
+                       background:'linear-gradient(90deg, #0F1C57)'
+                }}
+                >
+                {['Name', 'Category','Brand', 'Price','Warranty Period', 'Description','Demo Video URL', 'Actions'].map(h => (
                   <TableCell
                     key={h}
                     align={h === 'Actions' ? 'right' : 'left'}
                     sx={{
-                      backgroundColor: theme.palette.primary.main,
-                      color: theme.palette.primary.contrastText,
-                      fontWeight: 'bold'
+                      background: 'none',  
+                       color: '#fff',  
+                      fontWeight: 'bold',
+                        fontSize: 16,
+                       padding: '12px 16px',
+                      textTransform:'uppercase',
+                      letterSpacing: '1px',
+                      maxWidth: 200,
+                      
+
                     }}
                   >
                     {h}
@@ -139,9 +161,48 @@ export default function AdminDashboard() {
             <TableBody>
               {products.map(prod => (
                 <TableRow key={prod.id} hover>
-                  <TableCell>{prod.name}</TableCell>
-                  <TableCell>{prod.category}</TableCell>
-                  <TableCell>₹{prod.price}</TableCell>
+              <TableCell>
+  <Box display="flex" alignItems="center">
+    {prod.imageUrl && (
+      <Tooltip
+        title={
+          <img
+            src={prod.imageUrl}
+            alt={prod.name}
+            style={{
+              maxWidth: '200px',
+              maxHeight: '200px',
+              objectFit: 'contain',
+              borderRadius: 8
+            }}
+          />
+        }
+        arrow
+        placement="right"
+      >
+        <img
+          src={prod.imageUrl}
+          alt={prod.name}
+          style={{
+            width: 50,
+            height: 50,
+            objectFit: 'cover',
+            borderRadius: 4,
+            marginRight: 8,
+            cursor: 'pointer'
+          }}
+        />
+      </Tooltip>
+    )}
+    <Typography variant="body1">{prod.name}</Typography>
+  </Box>
+</TableCell>
+
+
+                   <TableCell sx={{ paddingRight: 9}}>{prod.category}</TableCell>
+                  <TableCell sx={{ paddingRight: 13}}>{prod.Brand}</TableCell>
+                  <TableCell sx={{ paddingRight: 4 }}>₹{prod.price}</TableCell>
+                  <TableCell>{prod.WarrantyPeriod }</TableCell>
                   <TableCell
                     sx={{
                       maxWidth: 200,
@@ -150,8 +211,18 @@ export default function AdminDashboard() {
                       textOverflow: 'ellipsis'
                     }}
                   >
-                    {prod.description}
-                  </TableCell>
+                    {prod.description}</TableCell>
+                  
+                  <TableCell>
+                    {prod.DemoVideoUrl && /^((https?:\/\/)|(www\.))/i.test(prod.DemoVideoUrl) ? (
+                   <Link href={prod.DemoVideoUrl} target="_blank" rel="noopener noreferrer">
+                     View Demo
+                     </Link>
+                     ) : (
+                     'N/A'
+                     )}
+                   </TableCell>
+
                   <TableCell align="right">
                     <Tooltip title="Edit">
                       <Button size="small" onClick={() => navigate(`/admin/product/${prod.id}`)}>

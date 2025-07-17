@@ -11,6 +11,7 @@ import Profile    from './pages/Profile';
 import Home       from './pages/Home';
 import ProductForm from './pages/ProductForm';
 import AdminDashboard from './pages/AdminDashboard';
+import EditProfile from './pages/EditProfile';
 import './App.css';
 
 function App() {
@@ -23,8 +24,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
 
-          <Route
-            path="/"
+          <Route path="/"
             element={
               <PrivateRoute>
                 <Home />
@@ -37,6 +37,7 @@ function App() {
               <PrivateRoute>
                 <Profile />
               </PrivateRoute>
+              
             }
           />
           <Route path="/admin" element={
@@ -50,6 +51,9 @@ function App() {
         </PrivateRoute>
         }/>
         </Routes>
+        <Routes>
+          <Route path="/edit-profile" element={<EditProfile />} />
+       </Routes>
       </BrowserRouter>
     </AuthProvider>
   );
