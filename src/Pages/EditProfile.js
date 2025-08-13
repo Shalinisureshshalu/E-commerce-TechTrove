@@ -9,6 +9,8 @@ import { auth, db } from '../firebase/config';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import InputAdornment from '@mui/material/InputAdornment';
 import ImageIcon from '@mui/icons-material/Image';
+import { updateProfile } from "firebase/auth";
+
 import bg from '../image/robo2.jpg'
 
 export default function EditProfile() {
@@ -21,6 +23,7 @@ export default function EditProfile() {
     photoURL:'',
     city: '',
   });
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -63,17 +66,21 @@ export default function EditProfile() {
     setLoading(true);
     try {
       const user = auth.currentUser;
-      if (user) {
-        await setDoc(doc(db, 'users', user.uid), form, { merge: true });
-        navigate('/profile'); // or wherever your profile page route is
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Failed to update profile.');
-    } finally {
-      setLoading(false);
+    if (user) {
+      await updateProfile(user, {
+        displayName: form.FirstName,
+        photoURL: form.photoURL,
+      });
+      await setDoc(doc(db, 'users', user.uid), form, { merge: true });
+       navigate('/profile');
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setError('Failed to update profile.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (loading) {
     return <Box textAlign="center" mt={4}><CircularProgress /></Box>;
@@ -81,18 +88,20 @@ export default function EditProfile() {
 
   return (
      <Box
-    sx={{
+      sx={{
       minHeight: '100vh',
       backgroundImage:  `url(${bg})`,
       backgroundSize: 'cover',
       backgroundPosition: 'right',
       backgroundRepeat: 'no-repeat',
+      blurbackgroundImage: '20px',
       display: 'flex',
-       alignItems: 'center', 
+       alignItems: 'flex-start', 
+       pt:4,
       justifyContent: 'flex-end',
-       pr: { xs: 2, sm: 8, md: 12 },
-    }}
-  >
+       pr: { xs: 2, sm: 8, md: 4 },
+      }}
+    >
 
       <Box
         sx={{
@@ -173,7 +182,7 @@ export default function EditProfile() {
       ),
       endAdornment: form.photoURL ? (
         <InputAdornment position="end">
-          <Avatar src={form.photoURL} sx={{ width: 32, height: 32 }} />
+          <Avatar src={form.photoURL} sx={{ width: 50, height: 50 }} />
         </InputAdornment>
       ) : null
     }}

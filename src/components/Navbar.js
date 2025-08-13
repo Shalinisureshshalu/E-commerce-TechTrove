@@ -1,5 +1,6 @@
 // ===== src/components/Navbar.jsx =====
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import logo from '../image/chat.png'; // Adjust the path as necessary
 import {
@@ -37,6 +38,8 @@ export default function Navbar() {
   const handleNavClose= () => setOpenNav(null);
   const handleUserOpen = e => setOpenUser(e.currentTarget);
   const handleUserClose= () => setOpenUser(null);
+
+  const location = useLocation();
 
   const handleLogout = async () => {
     handleUserClose();
@@ -98,7 +101,7 @@ export default function Navbar() {
                 <Avatar
                   src={currentUser.photoURL}
                   alt={currentUser.displayName || 'User'}
-                  sx={{ width: 32, height: 32 }}
+                  sx={{ width: 45, height: 45 }}
                 />
               </IconButton>
             ) : !isMobile ? (
@@ -108,9 +111,10 @@ export default function Navbar() {
                   to="/signin"
                   variant="outlined"
                   sx={{
-                    color: '#fff',
-                    borderColor: '#fff',
-                    mr: 1
+                    backgroundColor: location.pathname === '/signin' ? '#fff' : 'transparent',
+                   color: location.pathname === '/signin' ? '#0F1C57' : '#fff',
+                   border: '1px solid #fff',
+                   mr: 1
                   }}
                 >
                   Sign In
@@ -118,10 +122,11 @@ export default function Navbar() {
                 <Button
                   component={RouterLink}
                   to="/signup"
-                  variant="contained"
+                  variant="outlined"
                   sx={{
-                    bgcolor: '#fff',
-                    color: theme.palette.primary.main
+                    backgroundColor: location.pathname === '/signup' ? '#fff' : 'transparent',
+                    color: location.pathname === '/signup' ? '#0F1C57' : '#fff',
+                    border: '1px solid #fff',
                   }}
                 >
                   Sign Up

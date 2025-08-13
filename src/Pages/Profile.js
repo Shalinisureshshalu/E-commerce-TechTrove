@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { auth, db } from '../firebase/config';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import  background   from '../image/cart.png';
+import  background   from '../image/girlhd.jpg';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -97,7 +97,7 @@ export default function Profile() {
           <Grid item xs={12} md={3}>
             <Box sx={{ 
               backgroundColor: 'rgba(164, 10, 79, 0.4)', 
-              backdropFilter: 'blur(14px)',
+              backdropFilter: 'blur(65px)',
                p: 3,
               borderRadius: 4, 
               textAlign: 'center', 
@@ -135,7 +135,7 @@ export default function Profile() {
               <Grid item xs={12} md={6}>
                 <Box sx={{ 
                  backgroundColor: 'rgba(164, 10, 79, 0.4)', 
-                 backdropFilter: 'blur(25px)',
+                 backdropFilter: 'blur(65px)',
                   p: 3, 
                   borderRadius: 4 
                   }}
@@ -205,7 +205,7 @@ export default function Profile() {
               <Grid item xs={12} md={6}>
                 <Box mb={4} sx={{ 
                  backgroundColor: 'rgba(164, 10, 79, 0.4)',
-                  backdropFilter: 'blur(25px)', 
+                  backdropFilter: 'blur(65px)', 
                   p: 3, 
                   borderRadius: 4, 
                   }}>
@@ -218,8 +218,8 @@ export default function Profile() {
                 </Box>
 
                 <Box mb={4} sx={{ 
-                  backgroundColor: 'rgba(164, 10, 79, 0.4)',
-                  backdropFilter: 'blur(25px)', 
+                  backgroundColor: 'rgba(202, 11, 78, 0.4)',
+                  backdropFilter: 'blur(65px)', 
                   p: 3, 
                   borderRadius: 4 
                   }}>
@@ -234,7 +234,7 @@ export default function Profile() {
                 </Box>
                 <Box sx={{ 
                   backgroundColor: 'rgba(202, 11, 78, 0.4)',
-                  backdropFilter: 'blur(25px)', 
+                  backdropFilter: 'blur(65px)', 
                   p: 3, 
                   borderRadius: 4
                    }}

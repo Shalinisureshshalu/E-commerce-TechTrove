@@ -91,7 +91,8 @@ export default function SignIn() {
           borderRadius: 3,
           backgroundColor: 'rgba(255, 255, 255, 0.40)',
           backdropFilter: 'blur(25px)',
-          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)', 
+          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+
         }}
       >
         <CardContent>

@@ -20,19 +20,26 @@ import {
   Typography,
   Tooltip,
   Link,
-  useTheme
+  useTheme,
+  Tab,
+  Tabs
 }                                              from '@mui/material';
 import AddIcon          from '@mui/icons-material/Add';
 import EditIcon         from '@mui/icons-material/Edit';
 import DeleteIcon       from '@mui/icons-material/Delete';
-import { collection, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
+import CheckIcon    from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import { collection, onSnapshot, doc, deleteDoc,updateDoc } from 'firebase/firestore';
+import { getDoc }   from 'firebase/firestore';
 import { db }           from '../firebase/config';
 
 
 export default function AdminDashboard() {
   const theme     = useTheme();
   const navigate  = useNavigate();
+  const [tab, setTab]               = useState(0);
   const [products, setProducts]     = useState([]);
+  const [orders, setOrders]         = useState([]);
   const [loading, setLoading]       = useState(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [toDeleteId, setToDeleteId]   = useState(null);
@@ -52,10 +59,30 @@ export default function AdminDashboard() {
     return () => unsub();
   }, []);
 
+   useEffect(() => {
+  const unsub = onSnapshot(
+    collection(db, 'orders'),
+    snap => {
+      setOrders(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    },
+    err => {
+      console.error("Failed to fetch orders:", err);
+    }
+  );
+  return () => unsub();
+}, []);
+
+
   const handleDelete = async () => {
     await deleteDoc(doc(db, 'products', toDeleteId));
     setConfirmOpen(false);
     setToDeleteId(null);
+  };
+  const handleApprove = async (orderId) => {
+    await updateDoc(doc(db, 'orders', orderId), { status: 'approved' });
+  };
+     const handleReject = async (orderId) => {
+    await updateDoc(doc(db, 'orders', orderId), { status: 'rejected' });
   };
 
   if (loading) {
@@ -82,14 +109,7 @@ export default function AdminDashboard() {
         py: 6
       }}
     >
-      <Container maxWidth="lg">
-        {/* Page header */}
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={3}
-        >
+          <Container maxWidth="lg">
           <Typography variant="h4"  
            sx={{
            fontFamily: 'Poppins, sans-serif', // Change to any Google Font or system font
@@ -101,6 +121,14 @@ export default function AdminDashboard() {
             }}
         
           >Admin Dashboard</Typography>
+         <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 3 }}>
+          <Tab label="Products" />
+          <Tab label="Orders" />
+        </Tabs>
+         {tab === 0 && (
+          <>
+            <Box display="flex" justifyContent="flex-end" mb={2}>
+         
           <Button
             variant="contained"
             startIcon={<AddIcon />}
@@ -148,9 +176,7 @@ export default function AdminDashboard() {
                        padding: '12px 16px',
                       textTransform:'uppercase',
                       letterSpacing: '1px',
-                      maxWidth: 200,
-                      
-
+                      maxWidth: 1000,
                     }}
                   >
                     {h}
@@ -158,9 +184,11 @@ export default function AdminDashboard() {
                 ))}
               </TableRow>
             </TableHead>
+
             <TableBody>
               {products.map(prod => (
-                <TableRow key={prod.id} hover>
+                <TableRow 
+                key={prod.id} hover>
               <TableCell>
   <Box display="flex" alignItems="center">
     {prod.imageUrl && (
@@ -198,14 +226,13 @@ export default function AdminDashboard() {
   </Box>
 </TableCell>
 
-
-                   <TableCell sx={{ paddingRight: 9}}>{prod.category}</TableCell>
-                  <TableCell sx={{ paddingRight: 13}}>{prod.Brand}</TableCell>
+                   <TableCell sx={{ paddingRight: 6}}>{prod.category}</TableCell>
+                  <TableCell sx={{ paddingRight: 5}}>{prod.Brand}</TableCell>
                   <TableCell sx={{ paddingRight: 4 }}>₹{prod.price}</TableCell>
                   <TableCell>{prod.WarrantyPeriod }</TableCell>
                   <TableCell
                     sx={{
-                      maxWidth: 200,
+                      maxWidth: 150,
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis'
@@ -247,8 +274,7 @@ export default function AdminDashboard() {
             </TableBody>
           </Table>
         </TableContainer>
-      </Container>
-
+        
       {/* Confirmation dialog */}
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
         <DialogTitle>Confirm Deletion</DialogTitle>
@@ -262,6 +288,132 @@ export default function AdminDashboard() {
           </Button>
         </DialogActions>
       </Dialog>
+    </>
+  )}
+  {tab === 1 && (
+          <>
+            <Typography variant="h5" gutterBottom>Orders</Typography>
+            <TableContainer 
+            component={Paper} 
+            sx={{ 
+              borderRadius: 2,
+              overflow: 'hidden',
+              '& .MuiTableRow-root:nth-of-type(even)': {
+                backgroundColor: theme.palette.action.hover
+              }
+              }}>
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow
+                       sx={{
+                       background:'linear-gradient(90deg, #0F1C57)'
+                }}
+                >
+                    {['Order ID','User Name','Items','Total','Status','Accept','Reject'].map(h => (
+                      <TableCell 
+                      key={h} 
+                     align={h === 'Actions' ? 'center' : 'center'}
+                      sx={{ 
+                         background: 'none',  
+                       color: '#fff',  
+                      fontWeight: 'bold',
+                        fontSize: 16,
+                       padding: '12px 16px',
+                      textTransform:'uppercase',
+                      letterSpacing: '1px',
+                      maxWidth: 1000,
+                        
+                       }}
+                      >
+                      {h}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+
+                <TableBody>
+                  {orders.map(o => (
+                    <OrderRow 
+                    key={o.id} 
+                    order={o} 
+                    onApprove={handleApprove}
+                    onReject={handleReject}
+                    />
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        )}
+      </Container>
     </Box>
+  );
+}
+
+// helper to fetch and display user name, items list
+  function OrderRow({ order, onApprove,onReject}) {
+  const [userName, setUserName] = useState('');
+  const itemsText = order.items.map(i => `${i.name} x${i.quantity}`).join(', ');
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const snap = await getDoc(doc(db, 'users', order.userId));
+        if (snap.exists()) {
+          const user = snap.data();
+          setUserName(`${user.FirstName} ${user.LastName}`);
+        } else {
+          setUserName('Unknown User');
+        }
+      } catch (err) {
+        console.error('Error fetching user:', err);
+        setUserName('Error');
+      }
+    };
+
+    if (order.userId) fetchUser();
+  }, [order.userId]);
+
+                
+  return (
+    <TableRow>
+      <TableCell>{order.id}</TableCell>
+      <TableCell sx={{paddingRight:4}}>{userName}</TableCell>
+      <TableCell sx={{ paddingleft: 25,maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        {itemsText}
+      </TableCell>
+      <TableCell sx={{paddingRight:4}}>₹{order.total.toFixed(2)}</TableCell>
+      <TableCell sx={{ textTransform: 'capitalize',paddingRight:2}}>{order.status}</TableCell>
+
+      <TableCell align = "center">
+        {order.status !== 'approved' && order.status !== 'rejected' &&(
+          
+          <Tooltip title="Approve">
+            <Button
+              size="small"
+              color="success"
+              onClick={() => onApprove(order.id)}
+            >
+              <CheckIcon fontSize="small" />
+            </Button>
+          </Tooltip>
+        )}
+         </TableCell>
+      <TableCell align="center">
+        {order.status !== 'approved' && order.status !== 'rejected' &&(
+          <Tooltip title="Reject">
+            <Button
+              size="small"
+              color="error"
+              onClick={() => { onReject(order.id);
+              }}
+            >
+              <ClearIcon fontSize="small" />
+            </Button>
+            </Tooltip>
+      
+        )}
+      </TableCell>
+    </TableRow>
   );
 }
