@@ -250,7 +250,7 @@ export default function Home() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop: '50px',
+          marginTop: '-35px',
           marginBottom: '20px',
         }}
         >
@@ -265,7 +265,7 @@ export default function Home() {
           display: 'block',
           borderRadius: '4px',
           boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-          marginTop:'30x',
+          marginTop:'10x',
           marginBottom: '10px',
         }}
       />
