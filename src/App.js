@@ -19,6 +19,7 @@ import ProductDetails from './pages/ProductDetails'; // Importing ProductDetails
 import { CartProvider } from "./contexts/CartContext";
 import Shop from "./pages/Shop";
 
+
 function App() {
   return (
     <AuthProvider>
@@ -61,8 +62,6 @@ function App() {
         }/>
         </Routes>
         
-      
-       
         <Routes>
              <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/checkout" element={<Checkout/>} />

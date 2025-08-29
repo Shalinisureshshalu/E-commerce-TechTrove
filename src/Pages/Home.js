@@ -1,11 +1,12 @@
 // src/pages/Home.jsx
 import React from 'react';
-import { Box,
- Typography,
- Button,
+import { 
+Box,
+Typography,
+Button,
 TextField,
 InputAdornment,
-  IconButton,
+IconButton,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link as RouterLink } from 'react-router-dom';
@@ -15,9 +16,43 @@ import Image3 from '../image/ad headphones.jpg';
 import Image4 from '../image/ad ph.jpg';
 import Image5 from '../image/appliances.png';
 import Image6 from '../image/ad keyboard.jpg';
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../firebase/config";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export default function Home() {
+    const [search, setSearch] = useState("");
+  const [error, setError] = useState(""); 
+  const navigate = useNavigate();
+
+  const handleSearch = async () => {
+    if (!search.trim()) return;
+
+    try {
+      setError(""); 
+      const q = query(
+        collection(db, "products"),
+        where("name", "==", search.trim())
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        
+        const product = querySnapshot.docs[0]; 
+        navigate(`/product/${product.id}`);
+      } else {
+        setError("No products found");
+      }
+    } catch (err) {
+      console.error("Error searching:", err);
+      setError("Something went wrong!");
+    }
+  };
+
+
   return (
-    
+
     <Box
       sx={{
         height: '100vh',
@@ -45,6 +80,8 @@ export default function Home() {
       placeholder="Search Products"
       variant="outlined"
       size="small"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
       sx={{
         width: '300px',
         mt: 2,
@@ -55,13 +92,16 @@ export default function Home() {
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
-            <IconButton>
+             <IconButton onClick={handleSearch}>
               <SearchIcon />
             </IconButton>
           </InputAdornment>
         ),
       }}
     />
+    
+      {error && <Typography color="error">{error}</Typography>}
+
     <Box
       sx={{
         display:'flex',
@@ -271,6 +311,6 @@ export default function Home() {
       />
       </Box>
     </Box>
+    
   );
 }
-  
