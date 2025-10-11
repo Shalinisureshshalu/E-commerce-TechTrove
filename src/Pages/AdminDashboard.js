@@ -274,6 +274,23 @@ export default function AdminDashboard() {
             </TableBody>
           </Table>
         </TableContainer>
+         
+              <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Button
+            onClick={() => navigate('/shop')}
+            variant="contained"
+            sx={{
+              background: '#1976d2', // default Material UI blue
+                          color: '#fff', 
+                          '&:hover': {
+                           backgroundColor: '#115293'
+                          }
+            }}
+          >
+            <Typography sx={{ fontWeight: 'bold' }}>Cancel</Typography>
+          </Button>
+        </Box>
+
         
       {/* Confirmation dialog */}
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
@@ -411,9 +428,14 @@ export default function AdminDashboard() {
               <ClearIcon fontSize="small" />
             </Button>
             </Tooltip>
-      
+       
         )}
       </TableCell>
     </TableRow>
+       
+       
+
+
   );
 }
+ 

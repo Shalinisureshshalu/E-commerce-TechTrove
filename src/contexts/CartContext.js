@@ -14,28 +14,31 @@ export const useCart = () => useContext(CartContext);
 export function CartProvider({ children }) {
   const { currentUser } = useAuth();
   const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
    const hasLoaded = useRef(false);
   // Load / subscribe to Firestore cart when user logs in
   useEffect(() => {
     if (!currentUser) {
       setCartItems([]);
+      setLoading(false);
       return;
     }
     const cartRef = doc(db, 'carts', currentUser.uid);
     const unsub = onSnapshot(cartRef, (snap) => {
       if (snap.exists()) {
-        setCartItems(snap.data().items);
+        setCartItems(snap.data().items || []);
       } else {
         setCartItems([]);
       }
-       hasLoaded.current = true;
+      setLoading(false);
+      hasLoaded.current = true;
     });
     return () => unsub();
   }, [currentUser]);
 
   // Sync local cartItems to Firestore
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser|| !hasLoaded.current) return;
     const cartRef = doc(db, 'carts', currentUser.uid);
     setDoc(cartRef, { items: cartItems }, { merge: true })
       .catch(console.error);

@@ -15,6 +15,7 @@ import {
   TableCell,
   Paper,
   useTheme,
+  CircularProgress
   
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -24,16 +25,30 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 export default function Cart() {
   
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart , loading } = useCart();
   const navigate = useNavigate();
   const theme     = useTheme();
+
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,0);
-  const taxRate = 0.03; 
+  const taxRate = 0.02; 
   const taxes = total * taxRate;
   const grandTotal = total + taxes;
   
-  
+    if (loading) {
+    return (
+      <Box
+        sx={{
+          minHeight: '80vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <CircularProgress size={60} thickness={5} />
+      </Box>
+    );
+  }
 
   return (
        <Box

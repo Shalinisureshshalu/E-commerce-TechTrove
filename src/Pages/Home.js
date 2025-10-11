@@ -76,29 +76,7 @@ export default function Home() {
        "Tech Treasures, All in One Trove!"
       </Typography>
     
-      <TextField
-      placeholder="Search Products"
-      variant="outlined"
-      size="small"
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      sx={{
-        width: '300px',
-        mt: 2,
-        mb: 2,
-        backgroundColor: 'white',
-        borderRadius: '4px',
-      }}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-             <IconButton onClick={handleSearch}>
-              <SearchIcon />
-            </IconButton>
-          </InputAdornment>
-        ),
-      }}
-    />
+      
     
       {error && <Typography color="error">{error}</Typography>}
 

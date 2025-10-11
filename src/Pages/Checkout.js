@@ -49,19 +49,22 @@ export default function Checkout() {
     setLoading(true);
 
     try {
-      await addDoc(collection(db, 'orders'), {
-        userId: currentUser.uid,
+      // ✅ Add checkout data to Firestore with role info
+      await addDoc(collection(db, 'checkout'), {
+        userId: currentUser?.uid,
+        role: currentUser?.role || 'customer',  // <- Role added
         items: cartItems,
         shipping: { ...formData },
         total: totalCost,
         status: 'pending',
         createdAt: serverTimestamp()
       });
+
       clearCart();
-      navigate('/orders');
+      navigate('/orders'); // redirect to orders page
     } catch (err) {
       console.error(err);
-      setError('Failed to place order.');
+      setError('Failed to place order. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -69,18 +72,18 @@ export default function Checkout() {
 
   return (
     <Box 
-    sx={{
-      minHeight: '100vh',
-       backgroundImage:  `url(${bg})`,
+      sx={{
+        minHeight: '100vh',
+        backgroundImage: `url(${bg})`,
         backgroundSize: 'cover',
-       backgroundRepeat: 'no-repeat',
+        backgroundRepeat: 'no-repeat',
         backgroundPosition: 'right',
-       display: 'flex',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-end',
-      paddingTop: 7,
-    }}>
-
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-end',
+        paddingTop: 7,
+      }}
+    >
       <Card sx={{ maxWidth: 600, width: '100%', p: 3, borderRadius: 3 }}>
         <CardContent>
           <Typography variant="h5" align="center" gutterBottom>

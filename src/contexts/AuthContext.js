@@ -1,33 +1,60 @@
 // src/contexts/AuthContext.jsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '../firebase/config';
+import { auth, db } from '../firebase/config';
 import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
-/**
- * AuthProvider component is a context provider for managing user authentication state.
- * It uses Firebase's `onAuthStateChanged` to listen for changes in the authentication state
- * and provides the current user to the rest of the application through React Context.
- *
- *
- */
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [initializing, setInitializing] = useState(true);
+  const [loading, setLoading] = useState(true); // clearer than "initializing"
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, user => {
-      setCurrentUser(user);
-      setInitializing(false);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          // Fetch user data from Firestore
+          const userDocRef = doc(db, "users", user.uid);
+          const userDocSnap = await getDoc(userDocRef);
+
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            setCurrentUser({
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+              role: userData.role || "buyer", // ✅ include user role
+              ...userData
+            });
+          } else {
+            // No Firestore document found — fallback to basic auth info
+            setCurrentUser({
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+              role: "buyer"
+            });
+          }
+        } catch (err) {
+          console.error("Error fetching user document:", err);
+        }
+      } else {
+        setCurrentUser(null);
+      }
+      setLoading(false);
     });
+
     return unsubscribe;
   }, []);
 
-  // Don’t render children until we know auth state
-  if (initializing) {
-    return null; // or a spinner `<CircularProgress />`
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', marginTop: '40vh', fontSize: '18px' }}>
+        Loading user data...
+      </div>
+    );
   }
 
   return (
