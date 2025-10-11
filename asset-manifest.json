@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/E-commerce-TechTrove/static/css/main.e6c13ad2.css",
+    "main.js": "/E-commerce-TechTrove/static/js/main.0e4418bb.js",
+    "static/js/453.d3f67b5b.chunk.js": "/E-commerce-TechTrove/static/js/453.d3f67b5b.chunk.js",
+    "static/media/gemini.png": "/E-commerce-TechTrove/static/media/gemini.7a9e4e94f38298205dcb.png",
+    "static/media/vr1.jpg": "/E-commerce-TechTrove/static/media/vr1.c775167bda3be8a88d85.jpg",
+    "static/media/appliances.png": "/E-commerce-TechTrove/static/media/appliances.ce15d0e8f8bf9533bdf8.png",
+    "static/media/girlhd.jpg": "/E-commerce-TechTrove/static/media/girlhd.6b679408e37cd96c79f6.jpg",
+    "static/media/cart.png": "/E-commerce-TechTrove/static/media/cart.1be34aa78b3018dd583c.png",
+    "static/media/chat.png": "/E-commerce-TechTrove/static/media/chat.ae5a20e7b6effdadbf70.png",
+    "static/media/robo2.jpg": "/E-commerce-TechTrove/static/media/robo2.af86f8b31092156f23d4.jpg",
+    "static/media/ad keyboard.jpg": "/E-commerce-TechTrove/static/media/ad keyboard.ed0a53605c1f10b5fd87.jpg",
+    "static/media/ad headphones.jpg": "/E-commerce-TechTrove/static/media/ad headphones.f4c8503e2e820f2d1b54.jpg",
+    "static/media/ad ph.jpg": "/E-commerce-TechTrove/static/media/ad ph.f3c1ce85323c16904443.jpg",
+    "static/media/single Ac ad.jpg": "/E-commerce-TechTrove/static/media/single Ac ad.cf2536a526242635b119.jpg",
+    "static/media/single Tv ad.jpg": "/E-commerce-TechTrove/static/media/single Tv ad.87e8b7424c94ea0e7f43.jpg",
+    "index.html": "/E-commerce-TechTrove/index.html",
+    "main.e6c13ad2.css.map": "/E-commerce-TechTrove/static/css/main.e6c13ad2.css.map",
+    "main.0e4418bb.js.map": "/E-commerce-TechTrove/static/js/main.0e4418bb.js.map",
+    "453.d3f67b5b.chunk.js.map": "/E-commerce-TechTrove/static/js/453.d3f67b5b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.0e4418bb.js"
+  ]
+}
